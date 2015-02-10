@@ -1,0 +1,29 @@
+.ow_social_sharing {
+	padding-left: 10px;
+	padding-right: 10px;
+	float:left;
+}
+.addthis_toolbox {
+	display: inline-block;
+	margin-bottom: 20px;
+    width:90px;
+}
+.ow_social_sharing_widget {
+	margin-bottom: 0px;
+}
+.ow_social_sharing_box {
+    margin-bottom: 0px;
+}
+.addthis_toolbox .ow_social_sharing_button {
+    max-width:100px;
+    height: 21px;
+}
+.ow_social_sharing_widget .ow_social_sharing_button {
+	margin-bottom: 8px;
+}
+.addthis_button_facebook_like {
+	height: 21px;
+}
+.ow_social_sharing_nomargin {
+	margin-bottom: 0px;
+}

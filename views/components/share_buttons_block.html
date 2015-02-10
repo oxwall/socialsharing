@@ -1,0 +1,31 @@
+
+{block_decorator name="box" addClass="ow_no_cap"}
+
+<div class="ow_small clearfix" style="display: inline-block;">
+   <span class="ow_left" style="margin-right: 4px;">{text key='socialsharing+share'}</span>
+<!-- AddThis Button BEGIN -->
+
+<div class="addthis_toolbox addthis_default_style addthis_16x16_style {$class} ">
+    {foreach  from=$order key='key' item='item'}
+        {if $item === 'twitter'}
+        <a class="addthis_button_twitter ow_social_sharing_button" {if !empty($url)}tw:url="{$url}"{/if} {if !empty($title)}tw:text="{$title}"{elseif !empty($description)}tw:text="{$description}"{/if} ></a>
+        {/if}
+
+        {if  $item === 'facebook'}
+        <a class="addthis_button_facebook ow_social_sharing_button" fb:like:layout="button_count"></a>
+        {/if}
+
+        {if  $item === 'googlePlus'}
+        <a class="addthis_button_google_plusone_share ow_social_sharing_button" g:plusone:size="medium"></a>
+        {/if}
+
+        {if $item === 'pinterest'}
+        <a class="addthis_button_pinterest_share ow_social_sharing_button" {if !empty($imageUrl)}pi:pinit:media="{$imageUrl}" {/if} ></a>
+        {/if}
+    {/foreach}
+</div>
+
+<!-- AddThis Button END -->
+</div>
+
+{/block_decorator}
