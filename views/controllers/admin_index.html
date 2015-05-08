@@ -31,12 +31,12 @@
             {/block_decorator}
         {/block_decorator}
 
-	{form name='settings'}
-	    <table id="socialsharing_settings" class="ow_table_2 ow_form ow_stdmargin ow_center">
+	
+	<table id="socialsharing_settings" class="ow_table_2 ow_form ow_stdmargin ow_center">
             
-	        <tr class="ow_tr_first">
-	            <th width="1" colspan="2">{text key='socialsharing+social_services'}</th>
-	        </tr>
+            <tr class="ow_tr_first">
+                <th width="1" colspan="2">{text key='socialsharing+social_services'}</th>
+            </tr>
 
             {foreach from=$order item=item}
             <tr class="{cycle values='ow_alt1, ow_alt2'} sharing_item" item="{$item}">
@@ -44,12 +44,13 @@
                     {text key="socialsharing+`$item`"}
                 </td>
                 <td>
-                    {input name=$item}
+                    <input type="checkbox" name="{$item}" {if !empty($values[$item]) && $values[$item]}checked="checked"{/if}>
                 </td>
             </tr>
             {/foreach}
-
-	    </table>
+            {form name='upload'}
+	</table>
+        
         {block_decorator name="box" type="empty" iconClass="ow_ic_add" langLabel="socialsharing+default_image_title"}
             {block_decorator name="box" type="normal" addClass="ow_superwide ow_automargin ow_stdmargin"}
                 <p>{text key="socialsharing+default_image_description"}</p>
@@ -61,7 +62,7 @@
                 </div>
             {/block_decorator}
 
-            <div class="ow_right">{submit name='save_settings' class='ow_ic_save ow_positive'}</div>
+            <div class="ow_right">{submit name='upload_image' class='ow_ic_save ow_positive'}</div>
         {/block_decorator}
 	{/form}
 </div>
