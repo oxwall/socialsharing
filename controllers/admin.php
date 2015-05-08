@@ -113,28 +113,21 @@ class SOCIALSHARING_CTRL_Admin extends ADMIN_CTRL_Abstract
         {
             $order = $defautOrder;
         }
-
-        $this->assign('order', $order);
         
-        $settings = new Form('settings');
-        //printVar($order);
-        foreach ( $order as $item )
-        {
-            $element = new CheckboxField($item);
-            $element->setValue($config->getValue('socialsharing', $item));
-            $settings->addElement($element);
-        }
-
-        $settings->setEnctype("multipart/form-data");
-
+        $this->assign('order', $order);
+        $this->assign('values', OW::getConfig()->getValues('socialsharing'));
+        
+        $upload = new Form('upload');
+        $upload->setEnctype("multipart/form-data");
+        
         $file = new FileField('image');
         $validator = new SocialSharingImageValidator(true);
         $file->addValidator($validator);
-        $settings->addElement($file);
+        $upload->addElement($file);
 
-        $submit = new Submit('save_settings');
-        $settings->addElement($submit);
-        //printVar($config->getValue('socialsharing', 'facebook'));
+        $submit = new Submit('upload_image');
+        $submit->setValue(OW::getLanguage()->text('socialsharing', 'upload_image_button_label'));
+        $upload->addElement($submit);
 
         $apiKeyForm = new Form('api_key_form');
 
@@ -154,24 +147,18 @@ class SOCIALSHARING_CTRL_Admin extends ADMIN_CTRL_Abstract
 
         if ( OW::getRequest()->isPost() )
         {
-            if ( isset($_POST['save_settings']) )
+            if ( isset($_POST['upload_image']) )
             {
-                if ( $settings->isValid($_POST) )
+                if ( $upload->isValid($_POST) )
                 {
-                    $data = $settings->getValues();
-                    $config->saveConfig('socialsharing', 'facebook', (boolean)$data['facebook']);
-                    $config->saveConfig('socialsharing', 'twitter', (boolean)$data['twitter']);
-                    $config->saveConfig('socialsharing', 'googlePlus', (boolean)$data['googlePlus']);
-                    $config->saveConfig('socialsharing', 'pinterest', (boolean)$data['pinterest']);
-
                     SOCIALSHARING_BOL_Service::getInstance()->uploadImage($_FILES['image']['tmp_name']);
 
-                    OW::getFeedback()->info(OW::getLanguage()->text('socialsharing', 'settings_saved')); //Setting succsessfully saved
+                    OW::getFeedback()->info(OW::getLanguage()->text('socialsharing', 'image_upload_success')); //Image succsessfully uploaded
                     $this->redirect();
                 }
                 else
                 {
-                    OW::getFeedback()->error(OW::getLanguage()->text('socialsharing', 'settings_saved_error')); //
+                    OW::getFeedback()->error(OW::getLanguage()->text('socialsharing', 'image_upload_error')); //
                 }
             }
             else if ( isset($_POST['save_api_key']) )
@@ -191,7 +178,7 @@ class SOCIALSHARING_CTRL_Admin extends ADMIN_CTRL_Abstract
             }
         }
 
-        $this->addForm($settings);
+        $this->addForm($upload);
 
         $this->assign('imageUrl', SOCIALSHARING_BOL_Service::getInstance()->getDefaultImageUrl() . '?pid=' . md5(rand(0, 9999999999)) );
 
@@ -275,6 +262,35 @@ class SOCIALSHARING_CTRL_Admin extends ADMIN_CTRL_Abstract
 
         switch ( $command )
         {
+            case 'save_settings':                
+                    $key = null;
+                    
+                    if ( empty($_POST['key']) || !in_array($_POST['key'], SOCIALSHARING_CLASS_Settings::getEntityList()) )
+                    {
+                        echo json_encode(array('result' => false, 'msg' => 'invalid config name'));
+                        exit;
+                    }
+                    
+                    $key = $_POST['key'];
+                    
+                    $value = false;
+                    if ( !empty($_POST['value']) )
+                    {
+                        $value = (boolean)$_POST['value'];
+                    }
+                    
+                    if ( !OW::getConfig()->configExists('socialsharing', $key) ) 
+                    {
+                        echo json_encode(array('result' => false, 'msg' => 'config does not exists'));
+                        exit;
+                    }
+                    
+                    OW::getConfig()->saveConfig('socialsharing', $key, $value);
+                    
+                    echo json_encode(array('result' => true));
+                    exit;
+                    
+                break;
             case 'sort_sharing_item':
 
                 $result = false;

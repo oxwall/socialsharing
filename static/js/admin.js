@@ -4,6 +4,21 @@ var socialSharingAdmin = function( $params )
 
     this.responderUrl = $params.ajaxResponderUrl;
     var $questionTable = $('#socialsharing_settings');
+    
+    var checkbox = $('.sharing_item input[type="checkbox"]');
+    
+    checkbox.click(function(){
+        $.ajax( {
+            url: self.responderUrl,
+            type: 'POST',
+            data: {
+                command: 'save_settings',
+                key: $(this).attr("name"),
+                value: $(this).is(':checked') ? 1 : 0
+            },
+            dataType: 'json'
+        } );
+    });
 
     $questionTable.sortable(
     {
