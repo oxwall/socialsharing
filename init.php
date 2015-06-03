@@ -46,55 +46,7 @@ OW::getRouter()->addRoute(
     new OW_Route('socialsharing.place_list', 'admin/plugins/social-sharing/place_list', 'SOCIALSHARING_CTRL_Admin', 'placeList')
 ); */
 
-function socialsharing_get_sharing_buttons( BASE_CLASS_EventCollector $event )
-{
-    $params = $event->getParams();
-
-    $entityId = !empty($params['entityId']) ? $params['entityId'] : null;
-    $entityType = !empty($params['entityType']) ? $params['entityType'] : null;
-
-    if ( !empty($entityId) && !empty($entityType) )
-    {
-        $sharingInfoEvent = new OW_Event('socialsharing.get_entity_info', $params, $params);
-        OW::getEventManager()->trigger($sharingInfoEvent);
-
-        $data = $sharingInfoEvent->getData();
-        
-        $params = array_merge($params, $data);
-    }
-
-    $display= isset($params['display']) ? $params['display'] : true;
-    
-    if ( !$display )
-    {
-        return;
-    }
-
-    $url = !empty($params['url']) ? $params['url'] : null;
-    $description= !empty($params['description']) ? $params['description'] : OW::getDocument()->getDescription();
-    $title= !empty($params['title']) ? $params['title'] : OW::getDocument()->getTitle();
-    $image= !empty($params['image']) ? $params['image'] : null;
-    $class= !empty($params['class']) ? $params['class'] : null;
-
-    $displayBlock = false;//isset($params['displayBlock']) ? $params['displayBlock'] : true;
-
-    $cmp = new SOCIALSHARING_CMP_ShareButtons();
-    $cmp->setCustomUrl($url);
-    $cmp->setDescription($description);
-    $cmp->setTitle($title);
-    $cmp->setImageUrl($image);
-
-    $cmp->setDisplayBlock($displayBlock);
-
-    if ( !empty($class) )
-    {
-        $cmp->setBoxClass($class);
-    }
-
-    $event->add($cmp->render());
-}
-
-OW::getEventManager()->bind('socialsharing.get_sharing_buttons', 'socialsharing_get_sharing_buttons');
+SOCIALSHARING_CLASS_EventHandler::getInstance()->genericInit();
 
 function socialsharing_add_admin_notification( BASE_CLASS_EventCollector $coll )
 {
