@@ -46,7 +46,7 @@ OW::getRouter()->addRoute(
     new OW_Route('socialsharing.place_list', 'admin/plugins/social-sharing/place_list', 'SOCIALSHARING_CTRL_Admin', 'placeList')
 ); */
 
-SOCIALSHARING_CLASS_EventHandler::getInstance()->init();
+SOCIALSHARING_CLASS_EventHandler::getInstance()->genericInit();
 
 function socialsharing_add_admin_notification( BASE_CLASS_EventCollector $coll )
 {
