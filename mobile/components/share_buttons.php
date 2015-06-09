@@ -53,4 +53,19 @@ class SOCIALSHARING_MCMP_ShareButtons extends SOCIALSHARING_CMP_ShareButtons
         }
         return $parentReturn;
     }
+
+    public function isAllowedView()
+    {
+        if ( !OW::getConfig()->getValue('socialsharing', 'api_key') )
+        {
+            return false;
+        }
+
+        if ( OW::getConfig()->getValue('base', 'guests_can_view') != 1 || OW::getConfig()->getValue('base', 'maintenance'))
+        {
+            return false;
+        }
+
+        return true;
+    }
 }

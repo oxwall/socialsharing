@@ -104,8 +104,15 @@ class SOCIALSHARING_CLASS_EventHandler
         $event->add($cmp->render());
     }
 
+    public function addJsDeclarations( OW_Event $e )
+    {
+        //Langs
+        OW::getLanguage()->addKeyForJs('socialsharing', 'share_title');
+    }
+
     public function genericInit()
     {
         OW::getEventManager()->bind('socialsharing.get_sharing_buttons', array($this, 'socialsharing_get_sharing_buttons'));
+        OW::getEventManager()->bind(OW_EventManager::ON_FINALIZE, array($this, 'addJsDeclarations'));
     }
 }
