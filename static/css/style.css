@@ -8,6 +8,10 @@
 	margin-bottom: 20px;
     width:90px;
 }
+.addthis_toolbox.owm_addthis_toolbox {
+    margin-top: 20px;
+    width: 180px;
+}
 .ow_social_sharing_widget {
 	margin-bottom: 0px;
 }
@@ -17,6 +21,9 @@
 .addthis_toolbox .ow_social_sharing_button {
     max-width:100px;
     height: 21px;
+}
+.addthis_toolbox.owm_addthis_toolbox .ow_social_sharing_button {
+    height: 32px;
 }
 .ow_social_sharing_widget .ow_social_sharing_button {
 	margin-bottom: 8px;
