@@ -56,7 +56,7 @@ class SOCIALSHARING_CLASS_EventHandler
 
     private function __construct() { }
 
-    public function socialsharing_get_sharing_buttons( BASE_CLASS_EventCollector $event )
+    public function getSharingButtons( BASE_CLASS_EventCollector $event )
     {
         $params = $event->getParams();
 
@@ -112,7 +112,7 @@ class SOCIALSHARING_CLASS_EventHandler
 
     public function genericInit()
     {
-        OW::getEventManager()->bind('socialsharing.get_sharing_buttons', array($this, 'socialsharing_get_sharing_buttons'));
+        OW::getEventManager()->bind('socialsharing.get_sharing_buttons', array($this, 'getSharingButtons'));
         OW::getEventManager()->bind(OW_EventManager::ON_FINALIZE, array($this, 'addJsDeclarations'));
     }
 }

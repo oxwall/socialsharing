@@ -64,7 +64,7 @@ class SOCIALSHARING_MCLASS_EventHandler
         }
     }
 
-    public function socialsharing_get_mobile_button( BASE_CLASS_EventCollector $event )
+    public function getMobileButton( BASE_CLASS_EventCollector $event )
     {
         $params = $event->getParams();
 
@@ -107,6 +107,6 @@ class SOCIALSHARING_MCLASS_EventHandler
     public function init()
     {
         OW::getEventManager()->bind('class.get_instance', array($this, 'onGetClassInstance'));
-        OW::getEventManager()->bind('socialsharing.get_mobile_button', array($this, 'socialsharing_get_mobile_button'));
+        OW::getEventManager()->bind('socialsharing.get_mobile_button', array($this, 'getMobileButton'));
     }
 }
