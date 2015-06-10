@@ -64,8 +64,49 @@ class SOCIALSHARING_MCLASS_EventHandler
         }
     }
 
+    public function socialsharing_get_mobile_button( BASE_CLASS_EventCollector $event )
+    {
+        $params = $event->getParams();
+
+        $entityId = !empty($params['entityId']) ? $params['entityId'] : null;
+        $entityType = !empty($params['entityType']) ? $params['entityType'] : null;
+
+        if ( !empty($entityId) && !empty($entityType) )
+        {
+            $sharingInfoEvent = new OW_Event('socialsharing.get_entity_info', $params, $params);
+            OW::getEventManager()->trigger($sharingInfoEvent);
+
+            $data = $sharingInfoEvent->getData();
+
+            $params = array_merge($params, $data);
+        }
+
+        $display = isset($params['display']) ? $params['display'] : true;
+
+        if ( !$display )
+        {
+            return;
+        }
+
+        $class = !empty($params['class']) ? $params['class'] : null;
+        $text_key = !empty($params['text_key']) ? $params['text_key'] : null;
+
+        $cmp = OW::getClassInstance('SOCIALSHARING_MCMP_Button');
+        $cmp->setTextKey($text_key);
+        $cmp->setEntityType($entityType);
+        $cmp->setEntityId($entityId);
+
+        if ( !empty($class) )
+        {
+            $cmp->setBoxClass($class);
+        }
+
+        $event->add($cmp->render());
+    }
+
     public function init()
     {
         OW::getEventManager()->bind('class.get_instance', array($this, 'onGetClassInstance'));
+        OW::getEventManager()->bind('socialsharing.get_mobile_button', array($this, 'socialsharing_get_mobile_button'));
     }
 }
