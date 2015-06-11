@@ -30,9 +30,9 @@
  */
 
 /**
- * @author Podyachev Evgeny <joker.OW2@gmail.com>
+ * @author Sergei Kiselev <arrserg@gmail.com>
  * @package ow_plugins.socialsharing.components
- * @since 1.6
+ * @since 1.7.5
  */
 
 class SOCIALSHARING_MCMP_ShareButtons extends SOCIALSHARING_CMP_ShareButtons

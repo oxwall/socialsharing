@@ -30,16 +30,20 @@
  */
 
 /**
- * @author Podyachev Evgeny <joker.OW2@gmail.com>
+ * @author Sergei Kiselev <arrserg@gmail.com>
  * @package ow_plugins.socialsharing.components
- * @since 1.6
+ * @since 1.7.5
  */
 
 class SOCIALSHARING_MCMP_Button extends OW_MobileComponent
 {
 
     protected $class = "";
-    protected $text_key = "";
+    protected $title = null;
+    protected $description = null;
+    protected $url = null;
+    protected $imageUrl = null;
+    protected $buttonLabelKey = "";
     protected $entityType = "";
     protected $entityId = "";
 
@@ -67,15 +71,15 @@ class SOCIALSHARING_MCMP_Button extends OW_MobileComponent
     }
 
     /**
-     * @param string $text_key
+     * @param string $buttonLabelKey
      */
-    public function setTextKey($text_key)
+    public function setButtonLabelKey($buttonLabelKey)
     {
-        $this->text_key = $text_key;
+        $this->buttonLabelKey = $buttonLabelKey;
     }
 
     /**
-     * @param string $entityType
+     * @param $entityType
      */
     public function setEntityType($entityType)
     {
@@ -83,20 +87,77 @@ class SOCIALSHARING_MCMP_Button extends OW_MobileComponent
     }
 
     /**
-     * @param string $entityId
+     * @param $entityId
      */
     public function setEntityId($entityId)
     {
         $this->entityId = $entityId;
     }
 
+    /**
+     * @param string $url
+     */
+    public function setCustomUrl( $url )
+    {
+        if ( !empty($url) )
+        {
+            $this->url = strip_tags($url);
+        }
+    }
+
+    /**
+     * @param string $description
+     */
+    public function setDescription( $description )
+    {
+        if ( !empty($description) )
+        {
+            $this->description = strip_tags($description);
+        }
+    }
+
+    /**
+     * @param string $title
+     */
+    public function setTitle( $title )
+    {
+        if ( !empty($title) )
+        {
+            $this->title = strip_tags($title);
+        }
+    }
+
+    /**
+     * @param string $url
+     */
+    public function setImageUrl( $url )
+    {
+        if ( !empty($url) )
+        {
+            $this->imageUrl = strip_tags($url);
+        }
+    }
+
     public function onBeforeRender()
     {
+        $id = "mobile_share_button_" . uniqid(rand(0,999999));
+
+        $this->assign('id', $id);
         $this->assign('class', $this->class);
-        $this->assign('text_key', $this->text_key);
+        $this->assign('buttonLabelKey', $this->buttonLabelKey);
+
+        $data = json_encode(
+            array(
+                'title' => $this->title,
+                'description' => $this->description,
+                'url' => $this->url,
+                'image' => $this->imageUrl
+            )
+        );
+
         OW::getDocument()->addOnloadScript("
-            $('.mobile_share_button').on('click', function(){
-                OWM.ajaxFloatBox('SOCIALSHARING_MCMP_ShareButtons', ['{$this->entityType}', '{$this->entityId}'], {
+            $('#{$id}').on('click', function(){
+                OWM.ajaxFloatBox('SOCIALSHARING_MCMP_ShareButtons', [{$data}], {
                     width: 315,
                     title: OWM.getLanguageText('socialsharing', 'share_title')
                 });
