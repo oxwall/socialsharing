@@ -41,6 +41,11 @@ class SOCIALSHARING_MCLASS_EventHandler
     private static $classInstance;
 
     /**
+     * @var $cache
+     */
+    private static $cache = array();
+
+    /**
      * @return SOCIALSHARING_CLASS_EventHandler
      */
     public static function getInstance()
@@ -73,12 +78,19 @@ class SOCIALSHARING_MCLASS_EventHandler
 
         if ( !empty($entityId) && !empty($entityType) )
         {
-            $sharingInfoEvent = new OW_Event('socialsharing.get_entity_info', $params, $params);
-            OW::getEventManager()->trigger($sharingInfoEvent);
-
-            $data = $sharingInfoEvent->getData();
-
-            $params = array_merge($params, $data);
+            $hash = md5($entityType . $entityId);
+            if ( isset(self::$cache[$hash]) )
+            {
+                $data = self::$cache[$hash];
+            }
+            else
+            {
+                $sharingInfoEvent = new OW_Event('socialsharing.get_entity_info', $params, $params);
+                OW::getEventManager()->trigger($sharingInfoEvent);
+                $data = $sharingInfoEvent->getData();
+                self::$cache[$hash] = $data;
+            }
+            $params = array_merge($data, $params);
         }
 
         $display = isset($params['display']) ? $params['display'] : true;
@@ -89,10 +101,21 @@ class SOCIALSHARING_MCLASS_EventHandler
         }
 
         $class = !empty($params['class']) ? $params['class'] : null;
-        $text_key = !empty($params['text_key']) ? $params['text_key'] : null;
+        $buttonLabelKey = !empty($params['buttonLabelKey']) ? $params['buttonLabelKey'] : null;
+
+        $url = !empty($params['url']) ? $params['url'] : null;
+        $description= !empty($params['description']) ? $params['description'] : OW::getDocument()->getDescription();
+        $title= !empty($params['title']) ? $params['title'] : OW::getDocument()->getTitle();
+        $image= !empty($params['image']) ? $params['image'] : null;
 
         $cmp = OW::getClassInstance('SOCIALSHARING_MCMP_Button');
-        $cmp->setTextKey($text_key);
+
+        $cmp->setCustomUrl($url);
+        $cmp->setDescription($description);
+        $cmp->setTitle($title);
+        $cmp->setImageUrl($image);
+
+        $cmp->setButtonLabelKey($buttonLabelKey);
         $cmp->setEntityType($entityType);
         $cmp->setEntityId($entityId);
 
