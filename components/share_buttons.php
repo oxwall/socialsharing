@@ -208,9 +208,8 @@ class SOCIALSHARING_CMP_ShareButtons extends OW_Component
 
 			if ( !empty( $this->description ) )
 			{
-                $description = strip_tags(html_entity_decode($this->description));
-                $description = str_replace("\xC2\xA0", ' ', $description);
-                $description = (strlen($description) > 255) ? substr(strip_tags($description), 0 , 255) . '...' : $description;
+                $description = strip_tags($this->description);
+                $description = UTIL_String::truncate($description, 255, '...');
                 $script .= " description: ". json_encode($description) .",";
 				OW::getDocument()->addMetaInfo('og:description', $this->description, 'property');
 			}
