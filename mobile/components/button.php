@@ -155,6 +155,27 @@ class SOCIALSHARING_MCMP_Button extends OW_MobileComponent
             )
         );
 
+        if ( !empty($this->imageUrl) )
+        {
+            OW::getDocument()->addMetaInfo('image', $this->imageUrl, 'itemprop');
+            OW::getDocument()->addMetaInfo('og:image', $this->imageUrl, 'property');
+        }
+
+        if ( !empty( $this->url ) )
+        {
+            OW::getDocument()->addMetaInfo('og:url', $this->url, 'property');
+        }
+
+        if ( !empty( $this->description ) )
+        {
+            OW::getDocument()->addMetaInfo('og:description', $this->description, 'property');
+        }
+
+        if ( !empty( $this->title ) )
+        {
+            OW::getDocument()->addMetaInfo('og:title', $this->title, 'property');
+        }
+
         OW::getDocument()->addOnloadScript("
             $('#{$id}').on('click', function(){
                 OWM.ajaxFloatBox('SOCIALSHARING_MCMP_ShareButtons', [{$data}], {
