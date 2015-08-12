@@ -126,7 +126,8 @@ if ( !OW::getConfig()->configExists('socialsharing', 'place_virtual gifts') )
 
 OW::getPluginManager()->addPluginSettingsRouteName('socialsharing', 'socialsharing.admin');
 
-BOL_LanguageService::getInstance()->importPrefixFromZip(OW_DIR_PLUGIN . 'social_sharing' . DS . 'langs.zip', 'socialsharing');
+$plugin = OW::getPluginManager()->getPlugin('socialsharing');
+BOL_LanguageService::getInstance()->importPrefixFromZip($plugin->getRootDir() . 'langs.zip', 'socialsharing');
 
 $image = new UTIL_Image(OW::getPluginManager()->getPlugin('socialsharing')->getRootDir() . 'install' . DS . 'default.jpg');
 $imagePath = OW::getPluginManager()->getPlugin('socialsharing')->getUserFilesDir().'default.jpg';
